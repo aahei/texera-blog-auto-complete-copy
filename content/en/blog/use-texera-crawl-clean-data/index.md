@@ -204,3 +204,6 @@ Similarly, when the crawler starts to get an invalid response from the Web site,
 
 ### Summary
 In this blog, we share the experience of using Texera to build a crawling pipeline to collect Web data. Texera's powerful ability to control the pipeline execution allows us to monitor issues during runtime and fix the issues on the fly. 
+  
+## Acknowledgements
+Thanks to Chen Li for his help on this blog.
