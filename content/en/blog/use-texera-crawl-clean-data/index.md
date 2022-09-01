@@ -193,7 +193,7 @@ During the running of the crawling pipeline, there have been many instances of f
 Using Texera, we are immediately notified when such edge cases happen, and we can fix the issues on the fly.
 
 
-### Dynamically adjusting request rate
+### Dynamically Adjusting Request Rate
 
 In the crawler implementation, we initially set a low rate of two requests per second for the crawler to avoid being blocked. After running the pipeline for a while, we notice that the crawler does not reach the limit of the crawled Web sites.  Thus we increase the request rate to five requests per second to make the pipeline run faster. 
 
@@ -205,5 +205,5 @@ Similarly, when the crawler starts to get an invalid response from the Web site,
 ### Summary
 In this blog, we share the experience of using Texera to build a crawling pipeline to collect Web data. Texera's powerful ability to control the pipeline execution allows us to monitor issues during runtime and fix the issues on the fly. 
   
-## Acknowledgements
+#### Acknowledgements
 Thanks to Chen Li for his help on this blog.
