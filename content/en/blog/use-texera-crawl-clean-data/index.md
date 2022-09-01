@@ -11,7 +11,7 @@ contributors: ["Zuozhi Wang"]
 ---
 
 Crawling is a common yet important task to collect data from the Web. However, developing a good crawling pipeline is notoriously challenging due to the following reasons:
-1. The content and format of the Web pages can be quite unpredictable. Many "edge cases" need to be covered by the crawler and the parser. Moreover, these edge cases can happen after the pipeline has been running for a long time. This could cause the parser to extract wrong information, or even crashing the program.
+1. The content and format of the Web pages can be quite unpredictable. Many "edge cases" need to be covered by the crawler and the parser. Moreover, these edge cases can happen after the pipeline has been running for a long time. This could cause the parser to extract wrong information, or even crash the program.
 
 2. Many Web sites have rate-limiting or anti-crawling mechanisms. If not done carefully, the crawler might be blocked. One might run a crawler pipeline for a long time, then find out that the crawler is blocked. In such a case, the crawler needs to reduce the request rate on-the-fly, or even temporarily pause the execution. 
 
