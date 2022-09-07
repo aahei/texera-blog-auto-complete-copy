@@ -10,4 +10,4 @@ images: []
 
 #### Using Texera to do collaborative data analytics in action:
 
-{{< youtube id="CRA-aWrJ91c" >}}
+{{< youtube id="2gfPUZNsoBs" >}}
