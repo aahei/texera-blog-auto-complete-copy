@@ -44,10 +44,9 @@ To facilitate later comparison, we first create a map for each version, with ope
 
 Then we ran two passes on the map.
 
-In the first pass, we iterate through the operators of the historical version. Our goal is to find the added and modified operators. To find the added operators, we simply check if the operatorID exists in the keys of the map of the current version. If the operatorID exists in both versions, we then perform a deep comparison on the two operator properties associated with the operatorID using isEqual method from lodash, a JavaScript utility library. If they are different, we add the operatorID to the list of modified operators.
+1. In the first pass, we iterate through the operators of the historical version. Our goal is to find the added and modified operators. To find the added operators, we simply check if the operatorID exists in the keys of the map of the current version. If the operatorID exists in both versions, we then perform a deep comparison on the two operator properties associated with the operatorID using isEqual method from lodash, a JavaScript utility library. If they are different, we add the operatorID to the list of modified operators.
 
-
-In the second pass, we iterate through the operators of the current version to generate a list of operators that have been deleted.
+2. In the second pass, we iterate through the operators of the current version to generate a list of operators that have been deleted.
 
 So far, we have obtained all IDs of operators that have been added, modified, or deleted between the two versions.
 
