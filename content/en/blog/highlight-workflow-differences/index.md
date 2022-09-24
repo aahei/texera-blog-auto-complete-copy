@@ -1,7 +1,7 @@
 ---
-title: "Showing Operator Changes For Texera’s Version Control System"
+title: "Showing Changes Between Two Workflow Versions"
 description: ""
-lead: "In this blog, we share how we visually display the differences between the workflows in the Texera version control system."
+lead: "We discuss how to display the differences between two workflow versions in Texera."
 date: 2022-09-22T15:16:36-07:00
 lastmod: 2022-09-22T15:16:36-07:00
 draft: false
@@ -9,14 +9,14 @@ weight: 50
 # images: ["highlight-workflow-differences.jpg"]
 contributors: ["Jingqi Yao"]
 ---
-Texera has a version control system that automatically saves workflow drafts so users can easily view or restore early versions. However, the current implementation only shows the unannotated historical workflow. Users may find it hard to see how it differs from the existing workflow, especially when there is only a tiny change in one operator's property. Therefore, we want to improve the usability of the version control system by visually displaying the difference between the workflows.
+Texera has a version control system that automatically saves workflow versions so that users can easily view or restore early versions. The current implementation only shows each historical workflow. Users may find it hard to see how it differs from another workflow version, especially when there is only a tiny change. We want to improve the usability of the version control system by visually displaying the difference between two workflow versions.
 
 ### Task Overview
-The task can be divided into two phases: calculating and showing the differences between the workflows.
+The task can be divided into two phases: calculating and showing the differences between two workflow versions.
 
-In this task, we are showing all differences in an aggregated style (i.e., only displaying the historical version of workflow and highlighting the changes with respect to the current workflow). Although showing both versions side by side with highlights might better illustrate the changes, the current Texera system does not support displaying two workflows simultaneously, and an implementation of it would bring a significant change to the logistics of the system. Therefore, showing workflow differences in a “split” style is left for future enhancement.
+In this task, we are showing all differences in an aggregated style (i.e., only displaying the historical version of workflow and highlighting the changes with respect to the current version). Although showing both versions side-by-side with highlights might better display the changes, the current Texera system does not support displaying two workflows simultaneously. Showing workflow differences in two windows is left for future enhancement.
 
-To keep the user interface neat, we are only showing the differences of operators, while similar logic can be applied to other elements in the workflow, e.g., links and comment boxes, to show their difference between versions. For the simplicity of the user interface, operators' position changes have not been considered for now.
+To keep the user interface neat, we are only showing the differences of operators, while similar logic can be applied to other elements in the workflow, e.g., links and comment boxes. For simplicity of the user interface, operators' position changes are not considered for now.
 
 ### Use Case
 Here is the current workflow:
