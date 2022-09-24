@@ -59,5 +59,5 @@ However, we cannot do the same for the added operators because they do not exist
 ### Summary 
 In this blog, we share how we visually display the differences between the workflows in the Texera version control system. This enhancement would improve the usability of the current version control system and help users to view and restore the right version they want.
 
-#### Acknowledgement
+#### Acknowledgements
 Thanks to Sadeem Alsudais, Professor Chen Li, and the Texera team, for their help in the task and this blog.
