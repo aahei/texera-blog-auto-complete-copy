@@ -33,7 +33,7 @@ Texera is such a cloud service for GUI-and-workflow-based collaborative data ana
 </figure>
 
 
-In the following sections, I am going to unveil how we made real-time collaborative editing for a GUI-based workflow possible in Texera.
+In the following sections, we are going to unveil how we made real-time collaborative editing for a GUI-based workflow possible in Texera.
 
 ## Conflict Resolution and CRDT
 
@@ -109,7 +109,7 @@ This old architecture solved three things at a time:
 2. Enabling Undos/Redos when editing the workflow,
 3. Realization of our first attempt at collaborative workflow editing, which basically was using WebSocket to broadcast these commands to other users so that the actions can be replayed. But this approach had a fundamental problem of not being able to do any conflict resolution, so a "lock" had to be enforced.
 
-However, when we try to include synchronization with other clients into the scope, we see an apparent conflict in design patterns. Since it would be very complicated to try to alter the *Joint Graph* model into CRDTs, only *Texera Graph*  can be made shared-editable. The migration of *Texera Graph* is another challenge which I will show later, but a more pressing issue is the separation of data model and view model.
+However, when we try to include synchronization with other clients into the scope, we see an apparent conflict in design patterns. Since it would be very complicated to try to alter the *Joint Graph* model into CRDTs, only *Texera Graph*  can be made shared-editable. The migration of *Texera Graph* is another challenge which we will show later, but a more pressing issue is the separation of data model and view model.
 
 For example, for adding an operator, previously all we had to do was add the new `OperatorPredicate` into `OperatorIDMap` and draw a new Operator in *Joint Graph*. In a shared-editable *Texera Graph*,  `OperatorIDMap` is a CRDT which can be automatically synced across collaborators]. After adding a new `OperatorPredicate` into `OperatorIDMap`, if we also add the operator into *Joint Graph* in local frontend, since the view is not automatically synced, other collaborators will not be able to see it on their frontends.
 
@@ -275,8 +275,8 @@ On the more engineering-heavy side, since we use the *formly* library to generat
 
 ## Summary
 
-In this blog, we shared how we managed to implement real-time collaborative editing for Texera's Workflow Editor. Specifically, we introduced the conflict-resolution algorithm we chose and how we solved a few engineering challenges along the way. We hope the insights of this article can empower more open-source systems to include RTC more easily. In the future I might add more interesting details related to this work.
+In this blog, we shared how we managed to implement real-time collaborative editing for Texera's Workflow Editor. Specifically, we introduced the conflict-resolution algorithm we chose and how we solved a few engineering challenges along the way. We hope the insights of this article can empower more open-source systems to include RTC more easily. In the future we might add more interesting details related to this work.
 
 ## Acknowledgement
 
-I want to thank Zuozhi Wang for his contributions to this work. I also want to thank Prof. Chen Li for helping with this blog.
+We want to thank Prof. Chen Li for helping with this blog.
