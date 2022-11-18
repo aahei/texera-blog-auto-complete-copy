@@ -3,29 +3,34 @@ title: "How We Built a Real-time Collabortive Workflow Editor in Texera"
 description: ""
 lead: "In this blog, we share how we built a real-time collaborative workflow editor."
 date: 2022-11-17T14:27:42+01:00
-lastmod: 2022-08-30T14:27:42+01:00
+lastmod: 2022-11-17T14:27:42+01:00
 draft: false
 weight: 50
 # images: ["demo_video.jpg"]
-contributors: ["Xiaozhen Liu, Zuozhi Wang"]
+contributors: ["Xiaozhen Liu", "Zuozhi Wang"]
 ---
 
 Real-time collaborative editing has been so popularized in recent years to the point that it has become almost a hidden standard for major document editing providers. [Google Docs Editors](https://support.google.com/docs/?hl=en#topic=1382883), which includes Google Docs, Google Slides, etc., was a pioneer in real-time collaborative editing. Microsoft Office did not have real-time co-authoring capability until [2013](https://), 7 years after the initial release of Google Docs Editors. Then came Overleaf, which has become the go-to place for co-editing LaTeX documents. In WWDC this year, collaboration has also been a focus for Apple, with the introduction of FreeForm, a tool that allows users to collaborate on a single board with drawings, text, videos, etc. This is to add to Apple's trend of making most of its tools real-time collaborative, including iWorks, Apple Notes, and even Safari tabs.
 
 In 2022, instead of just a fancy add-on,  real-time collaboration (RTC) has become a must for most document editing apps. However, this capability is not limited to document editing, where the collaboration happens on static, no-executable contents, and primarily texts. For data science tools, RTC has also gradually become a new norm. JupyterLab, the native web-based IDE for Jupyter Notebooks, introduced RTC in v3.1 (See *Figure 1*). This addition allows a user to share a notebook to others to collaboratively edit a notebook, but the notebook environment is still hosted locally. Google Colab and DeepNote made Jupyter Notebook available as cloud services, while DeepNote stood out recently for its better RTC, environment management, and version control.
 
-| [![space-1.jpg](jupyter.png)](https://jupyterlab.readthedocs.io/en/stable/user/rtc.html) |
-|:--:|
-| *Figure 1: Collaborative Editing in Jupyter Lab* |
+<figure>
+<a href="https://jupyterlab.readthedocs.io/en/stable/user/rtc.html">
+<img src="jupyter.png" alt="Fig 1" style="width:100%">
+</a>
+<figcaption align = "center"><i>Figure 1: Collaborative Editing in Jupyter Lab</i></figcaption>
+</figure>
 
 But Data Science tools are not just about Notebooks, and collaboration more often than not involves knowledge from multiple domains, in which case not everyone knows Python or Jupyter Notebook. For this kind of collaboration, workflow-based tools with which one can simply use GUI to formulate a [Directed Acyclic Graph](https://en.wikipedia.org/wiki/Directed_acyclic_graph) (DAG) of operators become the natural platforms.
 
 Texera is such a cloud service for GUI-and-workflow-based collaborative data analytics at scale where users with different levels of technical expertise can work together at the same time. Before, the collaboration in Texera only allowed sharing a workflow, but two users could not co-edit the workflow in real time. With the introduction of RTC, using Texera to collaborate on Data Science tasks becomes even more natural, seamless, and powerful. More excitingly, the collaboration happens both at the workflow construction and execution stages, as demonstrated in the following video (See *Figure 2*):
 
-| [![Texera Collab Demo Video](demo_video.jpg)](https://www.youtube.com/watch?v=2gfPUZNsoBs) |
-|:--:|
-| *Figure 2: Texera's Demo Video for RTC and Collaborative Data Analytics* |
-
+<figure>
+<a href="https://www.youtube.com/watch?v=2gfPUZNsoBs">
+<img src="demo_video.jpg" alt="Fig 2" style="width:100%">
+</a>
+<figcaption align = "center"><i>Figure 2: Texera's Demo Video for RTC and Collaborative Data Analytics</i></figcaption>
+</figure>
 
 
 In the following sections, I am going to unveil how we made real-time collaborative editing for a GUI-based workflow possible in Texera.
@@ -34,10 +39,12 @@ In the following sections, I am going to unveil how we made real-time collaborat
 
 In our [initial attempt](https://github.com/Texera/texera/pull/1392) at RTC for workflow editor, we did not use any existing shared editing library but implemented a version based solely on WebSocket. A demo can be seen in *Figure 3*. The core implementation logic is to simply propagate editing actions from one client to all other connected clients for a workflow and replay the actions on these clients. This was not actually shared editing because we enforced an editing lock so that only one user can edit at a time to prevent any possible conflicts. This implementation was simple for our architecture and served a limited set of scenarios where only letting a user follow another user's editing session was enough.
 
-| [![Initial Attempt at RTC with lock](initial_imp.gif)](https://github.com/Texera/texera/pull/1460) |
-|:--:|
-| *Figure 3: Texera's Initial Attempt at RTC with Lock* |
-
+<figure>
+<a href="https://github.com/Texera/texera/pull/1460">
+<img src="initial_imp.gif" alt="Fig 3" style="width:100%">
+</a>
+<figcaption align = "center"><i>Figure 3: Texera's Initial Attempt at RTC with Lock</i></figcaption>
+</figure>
 
 
 However, we soon realized this lock-based implementation was not enough. To make our workflow shared editing truly achieve the goal of enabling collaborative data analytics, we had to get rid of the lock.
@@ -50,7 +57,7 @@ On the contrary, most shared-editing libraries today are CRDT-based, with Yjs an
 
 *Table 1* presents a list of RTC libraries that we have compiled during our search.
 
-*Table 1: RTC Libraries (by Nov. 2022)*
+<figcaption align = "center"><i>Table 1: RTC Libraries (by Nov. 2022)</i></figcaption>
 
 | Name                                                                            | License | Algorithm | Age (yrs) | Status  | Repo                                                                                                                                                                                                     |
 | ------------------------------------------------------------------------------- | ------- | --------- | --------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -79,9 +86,13 @@ Yjs is powerful as a CRDT library, but for Texera's frontend, it cannot be used 
 
 To make it easier to understand, *Figure 4* gives an overview of the elements that support Texera's Workflow Editor before the introduction of RTC. Let us leave things like User Systems and all that stuff about management of different workflows out for now, and focus on the case of only one workflow.
 
-| [![Old Workflow Editor Architecture](before.png)](https://github.com/Texera/texera/pull/1674) |
-|:--:|
-| *Figure 4: Texera's Previous Architecture for Workflow Editor* |
+<figure>
+<a href="https://github.com/Texera/texera/pull/1674">
+<img src="before.png" alt="Fig 4" style="width:100%">
+</a>
+<figcaption align = "center"><i>Figure 4: Texera's Previous Architecture for Workflow Editor</i></figcaption>
+</figure>
+
 
 Essentially, the data model for a workflow editor in Texera stores a DAG, which can be broken down into operators and links. We represent them separately in two `Map` structures, with their respective IDs being map keys. This can be seen in the left box for ***Texera Graph*** in the diagram. There are two more maps in *Texera Graph*, which are for other features. In general, the maps in *Texera Graph* are all that we need to send to Texera's backend engine (Amber) to execute, so *Texera Graph* is like the backbone of the frontend.
 
@@ -108,9 +119,13 @@ A very commonly used observer API in our codebase is `Y.Map.observe`. We can use
 
 Based on this change in the synchronization logic, we came up with our new architecture for the workflow editor, as shown in *Figure 5*.
 
-| [![New Workflow Editor Architecture](after.png)](https://github.com/Texera/texera/pull/1674) |
-|:--:|
-| *Figure 5: Texera's New Architecture for Workflow Editor* |
+<figure>
+<a href="https://github.com/Texera/texera/pull/1674">
+<img src="after.png" alt="Fig 5" style="width:100%">
+</a>
+<figcaption align = "center"><i>Figure 5: Texera's New Architecture for Workflow Editor</i></figcaption>
+</figure>
+
 
 The new architecture is what we call "*data-observer*" based, where the "single source of truth" is *Texera Graph*, in particular the CRDT-based `SharedModel`, and the view model, *Joint Graph*, secondarily depends on the data model, *Texera Graph*.
 
@@ -189,7 +204,7 @@ What `YType<T>` does as a TypeScript type is that it converts any JavaScript obj
 
 Now that we know what the type is for, `createTypeFromObject()` is a template function that converts any JavaScript object into a Yjs object. We use the following conversion rule in *Table 2*:
 
-*Table 2: Conversion Rule for `createYTYpeFromObject`*
+<figcaption align = "center"><i>Table 2: Conversion Rule for <code>createYTYpeFromObject</code></i></figcaption>
 
 | Original type   | Yjs Type      |
 | --------------- | ------------- |
@@ -239,10 +254,12 @@ This is because we hooked the (read-only) property object to *formly*, which onl
 
 *Figure 6* shows our Shared Property Editor with fine-grained control of textual fields.
 
-| [![Shared Property Editor](property_editor.gif)](https://github.com/Texera/texera/pull/1712) |
-|:--:|
-| *Figure 6: Texera's Collaborative Operator Property Editor* |
-
+<figure>
+<a href="https://github.com/Texera/texera/pull/1712">
+<img src="property_editor.gif" alt="Fig 6" style="width:100%">
+</a>
+<figcaption align = "center"><i>Figure 6: Texera's Collaborative Operator Property Editor</i></figcaption>
+</figure>
 
 To allow fine-grained control, one thing needs to be made sure: no existing shared object can be replaced with a new shared object, e.g., when a `Y.Text` has been created and added to the map, any modification on this `Y.Text` needs to be done in-place by modifying its children instead of creating a new `Y.Text` .
 
@@ -262,4 +279,4 @@ In this blog, we shared how we managed to implement real-time collaborative edit
 
 ## Acknowledgement
 
-I want to thank Zuozhi Wang for his contributions to this work. I also want to thank both Zuozhi and Prof. Chen Li for helping with this blog.
+I want to thank Zuozhi Wang for his contributions to this work. I also want to thank Prof. Chen Li for helping with this blog.
