@@ -1,5 +1,5 @@
 ---
-title: "How We Built a Real-time Collabortive Workflow Editor in Texera"
+title: "How We Built a Real-time Collaborative Workflow Editor in Texera"
 description: ""
 lead: "In this blog, we share how we built a real-time collaborative workflow editor."
 date: 2022-11-17T14:27:42+01:00
