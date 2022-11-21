@@ -8,6 +8,8 @@ draft: false
 weight: 50
 # images: ["demo_video.jpg"]
 contributors: ["Xiaozhen Liu", "Zuozhi Wang"]
+aliases:
+  - /blog/how-we-built-a-real-time-collabortive-workflow-editor-in-texera/
 ---
 
 Real-time collaborative editing has been so popularized in recent years to the point that it has become almost a hidden standard for major document editing providers. [Google Docs Editors](https://support.google.com/docs/?hl=en#topic=1382883), which includes Google Docs, Google Slides, etc., was a pioneer in real-time collaborative editing. Microsoft Office did not have real-time co-authoring capability until [2013](https://), 7 years after the initial release of Google Docs Editors. Then came Overleaf, which has become the go-to place for co-editing LaTeX documents. In WWDC this year, collaboration has also been a focus for Apple, with the introduction of FreeForm, a tool that allows users to collaborate on a single board with drawings, text, videos, etc. This is to add to Apple's trend of making most of its tools real-time collaborative, including iWorks, Apple Notes, and even Safari tabs.
