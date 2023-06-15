@@ -9,11 +9,12 @@ weight: 50
 # images: ["say-hello-to-doks.png"]
 contributors: ["Zuozhi Wang"]
 ---
+##### (This work was done by the author at Department of Computer Science, UC Irvine.)
 
 Crawling is a common yet important task to collect data from the Web. However, developing a good crawling pipeline is notoriously challenging due to the following reasons:
 1. The content and format of the Web pages can be quite unpredictable. Many "edge cases" need to be covered by the crawler and the parser. Moreover, these edge cases can happen after the pipeline has been running for a long time. This could cause the parser to extract wrong information, or even crash the program.
 
-2. Many Web sites have rate-limiting or anti-crawling mechanisms. If not done carefully, the crawler might be blocked. One might run a crawler pipeline for a long time, then find out that the crawler is blocked. In such a case, the crawler needs to reduce the request rate on-the-fly, or even temporarily pause the execution. 
+2. Many Web sites have rate-limiting or anti-crawling mechanisms. If not done carefully, the crawler might be blocked. One might run a crawler pipeline for a long time, then find out that the crawler is blocked. In such a case, the crawler needs to reduce the request rate on-the-fly, or even temporarily pause the execution.
 
 In this post, we share our experience on setting up a crawling pipeline on Texera, primarily using its Python User-Defined Function (UDF) support. Moreover, we show how Texera's dynamic execution control features, such as pausing, resuming, dynamically updating code on the fly, can help solve the above issues, and make it easier to develop and run such a pipeline.
 
@@ -58,11 +59,11 @@ The following screenshot shows the Texera workflow we have constructed.
 
 ```python
 class ProcessTupleOperator(UDFOperatorV2):
-    
+
     @overrides
     def process_tuple(self, tuple_: Tuple, port: int) -> Iterator[Optional[TupleLike]]:
         address = tuple_['address']
-        
+
         # fetch the google search result HTML page
         googleQuery = "http://google.com/search?q=" + urllib.parse.quote(address+ " loopnet")
         googlePage = requests.get(googleQuery)
@@ -79,13 +80,13 @@ class ProcessTupleOperator(UDFOperatorV2):
 ```
 </details>
 
-- The third operator takes the loopnet URL and fetches the property listing page from loopnet.com. It parses the HTML page to locate the `PROPERTY DETAIL` section, and extracts the size information. 
+- The third operator takes the loopnet URL and fetches the property listing page from loopnet.com. It parses the HTML page to locate the `PROPERTY DETAIL` section, and extracts the size information.
 <details>
   <summary>Python UDF code for operator "Fetch Property Info"</summary>
 
 ```python
 class ProcessTupleOperator(UDFOperatorV2):
-    
+
     @overrides
     def process_tuple(self, tuple_: Tuple, port: int) -> Iterator[Optional[TupleLike]]:
         self.loopnetUrl = tuple_['loopnet_url']
@@ -102,9 +103,9 @@ class ProcessTupleOperator(UDFOperatorV2):
             key = node.findChildren()[0].text.strip()
             value = node.parent.findChildren()[2].text.strip()
             self.kv[key] = value
-        
+
         tuple_["area"] = self.kv["TOTAL SQ FT"]
-    
+
         yield tuple_
 
 ```
@@ -125,12 +126,12 @@ In Texera, an exception raised by the Python UDF will not crash the program. Ins
 
 <img src="inspect.gif">
 
-We can easily find the address that causes this issue and visit its loopnet web page. This address is a corner case where the property is not listed on the Web site. 
+We can easily find the address that causes this issue and visit its loopnet web page. This address is a corner case where the property is not listed on the Web site.
 
 <img src="not_advertised.png" width="600">
 <img src="not_advertised_info.png" width="600">
 
-We can see that both the page layout and the content are different from regular listings. Therefore, we need to update the parser code to extract the property size from `Building Size`, instead of `TOTAL SQ FT`. 
+We can see that both the page layout and the content are different from regular listings. Therefore, we need to update the parser code to extract the property size from `Building Size`, instead of `TOTAL SQ FT`.
 
 We can take advantage of Texera's functionality to change the parser on-the-fly, without restarting the crawling pipeline from scratch. The following gif shows the process, and the updated code can be seen below.
 
@@ -142,7 +143,7 @@ We can take advantage of Texera's functionality to change the parser on-the-fly,
 
 ```python
 class ProcessTupleOperator(UDFOperatorV2):
-    
+
     @overrides
     def process_tuple(self, tuple_: Tuple, port: int) -> Iterator[Optional[TupleLike]]:
         self.loopnetUrl = tuple_['loopnet_url']
@@ -177,9 +178,9 @@ class ProcessTupleOperator(UDFOperatorV2):
                 key = node.findChildren()[0].text.strip()
                 value = node.parent.findChildren()[2].text.strip()
                 self.kv[key] = value
-        
+
             tuple_["area"] = self.kv["TOTAL SQ FT"]
-    
+
         yield tuple_
 
 ```
@@ -195,15 +196,15 @@ Using Texera, we are immediately notified when such edge cases happen, and we ca
 
 ### Dynamically Adjusting Request Rate
 
-In the crawler implementation, we initially set a low rate of two requests per second for the crawler to avoid being blocked. After running the pipeline for a while, we notice that the crawler does not reach the limit of the crawled Web sites.  Thus we increase the request rate to five requests per second to make the pipeline run faster. 
+In the crawler implementation, we initially set a low rate of two requests per second for the crawler to avoid being blocked. After running the pipeline for a while, we notice that the crawler does not reach the limit of the crawled Web sites.  Thus we increase the request rate to five requests per second to make the pipeline run faster.
 
 <img src="change_rate.gif">
 
-Similarly, when the crawler starts to get an invalid response from the Web site, it is a sign of the request rate being too high. In this case, we can again reduce the request rate. 
+Similarly, when the crawler starts to get an invalid response from the Web site, it is a sign of the request rate being too high. In this case, we can again reduce the request rate.
 
 
 ### Summary
-In this blog, we share the experience of using Texera to build a crawling pipeline to collect Web data. Texera's powerful ability to control the pipeline execution allows us to monitor issues during runtime and fix the issues on the fly. 
-  
+In this blog, we share the experience of using Texera to build a crawling pipeline to collect Web data. Texera's powerful ability to control the pipeline execution allows us to monitor issues during runtime and fix the issues on the fly.
+
 #### Acknowledgements
 Thanks to Chen Li for his help on this blog.

@@ -9,6 +9,7 @@ weight: 50
 # images: ["highlight-workflow-differences.jpg"]
 contributors: ["Jingqi Yao"]
 ---
+##### (This work was done by the author at Department of Computer Science, UC Irvine.)
 Texera has a version control system that automatically saves workflow versions so that users can easily view or restore early versions. The current implementation only shows each historical workflow. Users may find it hard to see how it differs from another workflow version, especially when there is only a tiny change. We want to improve the usability of the version control system by visually displaying the difference between two workflow versions.
 
 ### Task Overview
@@ -33,7 +34,7 @@ Once the user selects a particular version, we calculate the difference between 
 #### Calculating the Differences
 The `getWorkflowsDifference` function takes two workflow objects and returns all the IDs of operators that are different in the two versions.
 
-For each operator, the change can be categorized into three types: 
+For each operator, the change can be categorized into three types:
 - **Added**: the operator is added by the user;
 - **Modified**: the operator's properties are modified;
 - **Deleted**: the operator is deleted.
@@ -56,7 +57,7 @@ However, we cannot do the same for the added operators because they do not exist
     <img src="highlight_meaning.png"  width="500">
 </p>
 
-### Summary 
+### Summary
 In this blog, we share how we visually display the differences between the workflows in the Texera version control system. This enhancement would improve the usability of the current version control system and help users to view and restore the right version they want.
 
 #### Acknowledgements
