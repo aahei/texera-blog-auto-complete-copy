@@ -9,6 +9,7 @@ In this blog, we discuss the two new enhancement added to the attribute name aut
 Texera workflows consist of sequences of operators. Every operator has properties as the parameters of the data process function. For example, in Fig. 1, the "Filter" operator has three properties, `Attribute`, `Condition`, and `Value`. The property values in Fig. 1 indicate that the operator filters the records with amount greater than 1.
 
 **![](https://lh6.googleusercontent.com/lxGfMeDfnw14f4NskeiSVBlz3_CFUQYrQJ8l97GnDo5L5LXoZ4w8mxJUa9AnnOWn7FLlxO-kwmValePube-Hw21BlwuhzFLco_pPhdrJu7SHObcQXJEtug4h-oBDIqnXdGXfwYlerpGvkZyaZ84bK4s)**
+
 Fig. 1, Filter operator properties
 
 ### What is operator input schema
@@ -20,6 +21,7 @@ Various formats of data can be processed by Texera, and the format of data is re
 Many operators have properties that take an attribute name of the input data as value. For example, the `Attribute` property in the "Sentiment Analysis" operator takes the name of the attribute on which it will perform analysis. Autocomplete feature allows users to select an input attribute from a dropdown menu instead of manually typing in the name.
 
 **![](https://lh3.googleusercontent.com/vqgcIM-ae7mRCIbah-ZyZRJkM4T4MMNdo3HGQtVT0RFfeh9J69z7SIUspMfY1IUjJ0V30U84PLdBMd3QouXKLEbfjUBc3Ac5q3_CtKk5XAP55I3QY0oG2U6Q11TIWcXUrVfjhbGpUUgV7LPp1R4ACeM)**
+
 Fig. 2, Dropdown menu for attribute autocomplete
 
 ## Auto Attribute Correction
@@ -46,6 +48,7 @@ Fig. 3 shows how the attribute selection is automatically updated in the "Filter
 When the user changes the name of the output attribute of the "Sentiment Analysis" operator from `"A"` to `"B"`, the `Attribute` field whose value was `"A"` in the succeeding “Filter” operator is automatically updated to `"B"`.
 
 **![](https://lh6.googleusercontent.com/Zf6wNg1uX9m_zJLkqtcKAap8kNLQttz1whOKPG1xGFolZ6it0hYMIMw2hzCLukabM0P2hoJ43M4QIjIcULYP_mAKt0N3V82L-0yuK0FOLD9xjrXSx0DSSzlqZD9Qp8QUL1KvABBpbbw5pXXrGgVpqQ)**
+
 Fig. 3, Auto correction process when attribute is renamed
 
 #### When attribute is deleted
@@ -81,6 +84,7 @@ However, this determination could be wrong. It is possible that `Column C` is no
 |Column A|integer|
 |Column B|integer|
 |Column C|string|
+
 Table 1, Example 1 - old input schema
 
 |Attribute Name|Attribute Type|
@@ -88,6 +92,7 @@ Table 1, Example 1 - old input schema
 |Column A|integer|
 |Column D|string|
 |Column E|boolean|
+
 Table 2, Example 1 - new input schema
 
 Given that the determination is not unique, we need an algorithm to determine what are the most likely attribute changes happened to the input schema update. With the algorithm, we can know for the unmatched attribute, what attribute in the old schema corresponds to the attribute in the new schema, or whether an attribute is created or deleted. Inspired by how we compute the similarity between two strings in computer science using the edit distance as the metric, we adapt our own edit distance algorithm to compute the similarity between two attributes (name and type). 
@@ -104,6 +109,7 @@ The distance is based on the likelyhood of the change. For the edit distance for
 | Changed | Unchanged | 1 |
 | Unchanged | Changed | 1 |
 | Changed | Changed | 2 |
+
 Table 3, Attribute edit distance for update
 
 With this algorithm, for the old and new input schema example, we can say that `Column C` is believed to be renamed to `Column D`, instead of that `Column C` is deleted and `Column D` is a new attribute, because the former case has distance value 1 while the later case has distance value 2 (1 deletion+ 1 insertion). Also, `Column B` is deleted instead of renamed and type casted to `Column E`, because deletion only has distance 1, but the rename and type casted is considered an update of distance 2.
@@ -122,12 +128,14 @@ The implementation of the auto attribute correction cannot always find out the c
 |--|--|
 |Column A|integer|
 |Column B|integer|
+
 Table 4, Example 2 - old input schema
 
 |Attribute Name|Attribute Type|
 |--|--|
 |Column C|integer|
 |Column D|integer|
+
 Table 5, Example 2 - new input schema
 
 ## Attribute Type Suggestion
@@ -154,6 +162,7 @@ Fig. 4, Sentimen Analysis type suggestion example
 "Hash Join" operator requires the two key attribute to have the same type.
 
 **![](https://lh4.googleusercontent.com/sDvAMcvoZlZ9IhEL4Vt3FxtqdgmszacOGzoS7HzhKGhGUS0tM_b_alb_eSJushXsqWAaazlBQ_gpvSsw1-ejhvSqFJf_-TIRNd5l6NQHpNU7MwyYdQ8FMRlHXb9zo2YpcZRohpKF3tVZ7cdScZxymA8)**
+
 Fig. 5, Hash Join type suggestion example
 
 #### Aggregate Opeartor
@@ -161,6 +170,7 @@ Fig. 5, Hash Join type suggestion example
 "Aggregate" operator supports multiple aggregation functions, like sum, count, concat, etc. Each aggregation function has different requirement regarding its input attribute. For example, sum function must be computed on a numeric type attribute (integer, long, double, or timestamp), and concat function must be computed on a string type attribute, while count function has no type requirement.
 
 **![](https://lh6.googleusercontent.com/2TSCNDgPyQz-1XAQneiRzDkXg4Ig1ZGHpcukHgXqD9YRUX_HPCOi0l9chI-zM2BsM4F9zABxIUt06UO3Abgy-at6RrzPf2Z71wERAWpS-HpxefwtBMcin0Fu6afTy86GsSyE-nAEhkBJlGlim6W34qU)**
+
 Fig. 6, Aggregate type suggestion example
 
 ### Implementation
