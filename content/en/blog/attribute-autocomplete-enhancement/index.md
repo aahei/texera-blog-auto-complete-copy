@@ -1,3 +1,15 @@
+---
+title: "Enhancing Attribute Autocomplete Functionality -  Auto Correction and Type Suggestion"
+description: ""
+lead: "We discuss the two new enhancement added to the attribute name autocomplete feature in Texera, auto attribute correction and attribute type suggestion"
+date: 2023-06-18T20:58:20-07:00
+lastmod: 2023-06-18T20:58:20-07:00
+draft: true
+weight: 50
+#images: ["attribute-autocomplete-enhancement.jpg"]
+contributors: ["Chengxi Li"]
+---
+
 # Enhancing Attribute Autocomplete Functionality -  Auto Correction and Type Suggestion
 
 In this blog, we discuss the two new enhancement added to the attribute name autocomplete feature in Texera, auto attribute correction and attribute type suggestion, making the feature more user-friendly.
