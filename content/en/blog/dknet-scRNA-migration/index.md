@@ -249,7 +249,7 @@ class ScatterplotGenerator(UDFTupleOperatorV2):
 
 ### Summary
 
-In this blog, we shared the experience of migrating a scRNA sequence analysis task written in R into Texera, and overcame the fact that Texera does not have built-in R UDF support yet. Specifically, we discussed how to use the `rpy2` library to execute R code in the Python environment, how to transfer R objects into the Python environment and how to transfer R objects between two operators on the workflow. We also discussed the design of decomposing the R script into a fully fledged workflow, with virtualization enabled with HTML visualizer.
+In this blog, we shared the experience of migrating a scRNA sequence analysis task written in R into Texera, and overcame the fact that Texera does not have built-in R UDF support yet. Specifically, we discussed how to use the `rpy2` library to execute R code in the Python environment, how to transfer R objects into the Python environment and how to transfer R objects between two operators on the workflow. We also discussed the design of decomposing the R script into a fully fledged workflow, with visualization enabled with HTML operators.
 
 
 #### Acknowledgements
