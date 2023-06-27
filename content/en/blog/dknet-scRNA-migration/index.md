@@ -2,8 +2,8 @@
 title: "Using Texera to perform single-cell RNA sequencing analysis with R Language"
 description: ""
 lead: "We share the experience of using Python UDFs in Texera to execute R code to perform RNA sequence analysis."
-date: 2023-06-27T14:03:21-07:00
-lastmod: 2023-06-27T14:03:21-07:00
+date: 2023-06-27T14:26:21-07:00
+lastmod: 2023-06-27T14:26:21-07:00
 draft: false
 weight: 50
 contributors: [ "Yicong Huang, UC Irvine." ]
@@ -121,7 +121,7 @@ The evaluation of the R code took place within the Global Environment, which is 
 In this environment, any variables created by the R code were automatically stored and becoming accessible for subsequent operations in R.
 In this case, the Python UDF simply worked as an invoker of the R code, without any data transformation between the R environment and the Python environment.
 
-#### Visualization plots as HTML
+#### Visualizing plots as an HTML
 All the plots are rendered in one HTML file, which can be visualized in Texera. Users can click the "view result" operator to see the visualization pop up window. Figure 3 shows the Texera UI of rendering the visualized plots in HTML.
 
 <figure>
@@ -254,5 +254,5 @@ In this blog, we shared the experience of migrating a scRNA sequence analysis ta
 
 #### Acknowledgements
 
-Thanks to Prof. Chen Li, Prof. Shuibing Chen and Dr. Tuo Zhang for their help with the task and the blog.
+Thanks to Prof. Shuibing Chen, Prof. Chen Li, and Dr. Tuo Zhang for their help with the task and the blog.
 
