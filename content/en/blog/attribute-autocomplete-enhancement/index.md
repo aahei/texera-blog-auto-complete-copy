@@ -1,34 +1,30 @@
 ---
 title: "Enhancing Attribute Autocomplete Functionality - Auto Correction and Type Validation"
-description: ""
-lead: "We discuss the two new enhancements added to the attribute autocomplete feature in Texera, auto attribute correction and attribute type validation"
+description: "ihkugcf"
+lead: "In this blog, we discuss the two new enhancements added to the attribute autocomplete feature in Texera, auto attribute correction and attribute type validation."
 date: 2023-06-18T20:58:20-07:00
 lastmod: 2023-06-18T20:58:20-07:00
-draft: true
+draft: false
 weight: 50
 #images: ["attribute-autocomplete-enhancement.jpg"]
 contributors: ["Chengxi Li"]
 ---
-
-# Enhancing Attribute Autocomplete Functionality - Auto Correction and Type Validation
-
-In this blog, we discuss the two new enhancements added to the attribute autocomplete feature in Texera, auto attribute correction and attribute type validation, making the feature more user-friendly.
-
 ## Background
 
 ### What are operator properties
 
-Texera workflows consist of sequences of operators. Every operator has properties as the parameters of the data process function. For example, in Fig. 1, the "Filter" operator has three properties, `Attribute`, `Condition`, and `Value`. 
+Texera workflows consist of sequences of operators. Every operator has properties as the parameters of the data process function. For example, in Figure 1, the "Filter" operator has three properties, `Attribute`, `Condition`, and `Value`. 
 
 Among the properties, there are attribute properties that accept input attribute names as values, usually describing the attributes that the operator applies. In this operator, `Attribute` is an attribute property, and `amount` is the attribute to which the filter will apply.
 
-The property values in Fig. 1 indicate that the operator filters the records with an `amount` greater than 1.
+The property values in Figure 1 indicate that the operator filters the records with an `amount` greater than 1.
 
-**![](https://lh6.googleusercontent.com/lxGfMeDfnw14f4NskeiSVBlz3_CFUQYrQJ8l97GnDo5L5LXoZ4w8mxJUa9AnnOWn7FLlxO-kwmValePube-Hw21BlwuhzFLco_pPhdrJu7SHObcQXJEtug4h-oBDIqnXdGXfwYlerpGvkZyaZ84bK4s)**
+<figure align="center">
+<img src="filter-operator-editor.png" alt="Figure 1" style="max-width:23rem">
+<figcaption><i>Figure 1: Filter Operator Properties</i></figcaption>
+</figure>
 
-Fig. 1, Filter operator properties
-
-### What is the operator input schema
+### What are operator input schemas
 
 Various formats of data can be processed by Texera, and the format of data is represented by its schema, which is a set of attributes. In order to let every operator know what attributes of the data are available, each operator deduces its output schema using its input schema and propagates it to the next operator. This mechanism is called "schema propagation." Schema propagation is an important part of the system, as it is the base of many useful features such as operator validation and attribute autocomplete.
 
@@ -36,17 +32,18 @@ Various formats of data can be processed by Texera, and the format of data is re
 
 Many operators have properties that accept an input attribute name as the value. For example, the `Attribute` property in the "Sentiment Analysis" operator takes the name of the attribute on which it will perform analysis. Autocomplete feature allows users to select an input attribute from a dropdown menu instead of manually typing in the name.
 
-**![](https://lh3.googleusercontent.com/vqgcIM-ae7mRCIbah-ZyZRJkM4T4MMNdo3HGQtVT0RFfeh9J69z7SIUspMfY1IUjJ0V30U84PLdBMd3QouXKLEbfjUBc3Ac5q3_CtKk5XAP55I3QY0oG2U6Q11TIWcXUrVfjhbGpUUgV7LPp1R4ACeM)**
-
-Fig. 2, Dropdown menu for attribute autocomplete
+<figure align="center">
+<img src="autocomplete-dropdown-menu.png" alt="Figure 2" style="max-width:17rem">
+<figcaption><i>Figure 2: Dropdown Menu for Attribute Autocomplete</i></figcaption>
+</figure>
 
 ## Auto Attribute Correction
 
-PR: https://github.com/Texera/texera/pull/1663
+PR: <https://github.com/Texera/texera/pull/1663>
 
 ### Motivation
 
-In the previous implementation, when an attribute name in the input schema of an operator changes, the field of this operator that selects the attribute will not update its value according to the change in the attribute name, and the operator will therefore become invalid. Intuitively, it is expected that the field will be updated accordingly. 
+In the old version of Texera, when an attribute name in the input schema of an operator changes, the field of this operator that selects the attribute will not update its value according to the change in the attribute name, and the operator will therefore become invalid. Intuitively, it is expected that the field will be updated accordingly. 
 
 Moreover, when an attribute is deleted from the input schema, the field of the operator that contains the attribute will not be cleared and the operator will not be invalidated, which will cause a runtime error that the user can't see in the backend, due to the invalid attribute selection, when the user tries to execute the workflow. To avoid this, it is expected to clear the fields containing the deleted attribute and invalidate the operator.
 
@@ -65,13 +62,14 @@ Note that when a new attribute is added or when the attribute is cast to another
 
 When a user renames an attribute through an operator, the attribute name will be updated in all succeeding operators.
 
-Fig. 3 shows how the attribute selection is automatically updated in the "Filter" operator when the result attribute name is changed in its preceding "Sentiment Analysis" operator.
+Figure 3 shows how the attribute selection is automatically updated in the "Filter" operator when the result attribute name is changed in its preceding "Sentiment Analysis" operator.
 
 When the user changes the name of the output attribute of the "Sentiment Analysis" operator from `"A"` to `"B"`, the `Attribute` field whose value was `"A"` in the succeeding “Filter” operator is automatically updated to `"B"`.
 
-**![](https://lh6.googleusercontent.com/Zf6wNg1uX9m_zJLkqtcKAap8kNLQttz1whOKPG1xGFolZ6it0hYMIMw2hzCLukabM0P2hoJ43M4QIjIcULYP_mAKt0N3V82L-0yuK0FOLD9xjrXSx0DSSzlqZD9Qp8QUL1KvABBpbbw5pXXrGgVpqQ)**
-
-Fig. 3, Auto correction process when an attribute is renamed
+<figure align="center">
+<img src="auto-attribute-correction-process.gif" alt="Figure 3">
+<figcaption><i>Figure 3: Auto Correction Process When an Attribute Is Renamed</i></figcaption>
+</figure>
 
 #### When an attribute is deleted
 
@@ -97,13 +95,15 @@ Here is a possible situation that happened to the input schema. `Column A` is un
 
 However, this determination could be wrong. It is possible that `Column C` is not renamed but deleted and `Column D` is a new attribute with the same type string. Moreover, it is also possible, despite unlikely, that `Column B` is not deleted but renamed to `Column E` and converted from integer type to boolean type.
 
+<figcaption align="center"><i>Table 1: Old Input Schema (Example 1)</i></figcaption>
+
 |Attribute Name|Attribute Type|
 |--|--|
 |Column A|integer|
 |Column B|integer|
 |Column C|string|
 
-Table 1, Example 1 - old input schema
+<figcaption align="center"><i>Table 2: New Input Schema (Example 1)</i></figcaption>
 
 |Attribute Name|Attribute Type|
 |--|--|
@@ -111,31 +111,29 @@ Table 1, Example 1 - old input schema
 |Column D|string|
 |Column E|boolean|
 
-Table 2, Example 1 - new input schema
-
 Given that the determination is not unique, we need an algorithm to determine what are the most likely attribute changes that happened to the input schema update. With the algorithm, we can know for the unmatched attribute, what attribute in the old schema corresponds to the attribute in the new schema, or whether an attribute is created or deleted. Inspired by how we compute the similarity between two strings in computer science using the edit distance as the metric, we adapt our own edit distance algorithm to compute the similarity between two attributes (name and type). 
 
-In the Levenshtein edit distance algorithm used for strings, the distance is measured by the minimum number of single-character edits (insertions, deletions, or substitutions) required to change one word into the other. For example, the distance between "**k**itten" and  "**s**itten" is 1 because of the substitution of "s" for "k". Please refer to https://en.wikipedia.org/wiki/Levenshtein_distance.
+In the Levenshtein edit distance algorithm used for strings, the distance is measured by the minimum number of single-character edits (insertions, deletions, or substitutions) required to change one word into the other. For example, the distance between "**k**itten" and  "**s**itten" is 1 because of the substitution of "s" for "k". Please refer to <https://en.wikipedia.org/wiki/Levenshtein_distance>.
 
 In our attribute edit distance algorithm, we compute the distance based on the name and the type. Unlike the Levenshtein distance where single-character insertions, deletions, and substitutions all have distance 1, we consider insertion and deletion to have distance 1, and update to have various distances depending on the name and type change, reflected in Table 3.
 
 The distance is based on the likelihood of the change. For the edit distance for an update, if either attribute name or type is changed, then it has a distance of 1. If both the attribute name and type are changed, it is considered unlikely, thus having a distance of 2.
 
+<figcaption align="center"><i>Table 3: Attribute Edit Distance</i></figcaption>
+
 | Attribute Change | Distance |
 |--|--|
 | Insertion | 1 |
 | Deletion | 1 |
-| Update | 1-2 (See Table 4) |
+| Update | 1 or 2 (See Table 4) |
 
-Table 3, Attribute edit distance
+<figcaption align="center"><i>Table 4: Attribute Edit Distance for Update</i></figcaption>
 
 | Attribute Name | Attribute Type | Distance |
 |--|--|--|
 | Changed | Unchanged | 1 |
 | Unchanged | Changed | 1 |
 | Changed | Changed | 2 |
-
-Table 4, Attribute edit distance for update
 
 With this algorithm, for the old and new input schema example, we can say that `Column C` is believed to be renamed to `Column D`, instead of that `Column C` is deleted and `Column D` is a new attribute, because the former case has distance value 1 while the later case has distance value 2 (1 deletion+ 1 insertion). Also, `Column B` is deleted instead of renamed and typecasted to `Column E`, because deletion only has distance 1, but the rename and typecasting is considered an update of distance 2.
 
@@ -149,25 +147,25 @@ The property update is conducted recursively because the object of operator prop
 
 The implementation of the auto attribute correction cannot always find out the correct attribute changes because of the attribute edit distance algorithm. We should notice due to the limited information that an operator knows about its input schema, it can only "guess" what changes happened, but cannot confidently determine the changes. While we find out the most likely changes using our edit distance algorithm, the method shall not be considered 100% correct. Moreover, in some cases, two possible changes may be the same edit distance. In the example of Tables 4 and 5, it is possible that `Column A` is renamed to `Column C` and `Column B` is renamed to `Column D`, meanwhile it is also possible that `Column A` is renamed to `Column D` and `Column B` is renamed to `Column C`. Both possibilities have distance 2. In this case, our edit distance algorithm may take either result.
 
+<figcaption align="center"><i>Table 5: Old Input Schema (Example 2)</i></figcaption>
+
 |Attribute Name|Attribute Type|
 |--|--|
 |Column A|integer|
 |Column B|integer|
 
-Table 5, Example 2 - old input schema
+<figcaption align="center"><i>Table 6: New Input Schema (Example 2)</i></figcaption>
 
 |Attribute Name|Attribute Type|
 |--|--|
 |Column C|integer|
 |Column D|integer|
 
-Table 6, Example 2 - new input schema
-
 ## Attribute Type Validation
 
-Issue: https://github.com/Texera/texera/issues/1889
+*Issue: <https://github.com/Texera/texera/issues/1889>*
 
-PR: https://github.com/Texera/texera/pull/1924, https://github.com/Texera/texera/pull/2005
+*PR: <https://github.com/Texera/texera/pull/1924>, <https://github.com/Texera/texera/pull/2005>*
 
 ### Motivation
 
@@ -183,24 +181,28 @@ Operators have different constraints on the attribute type depending on their fu
 
 The "Sentiment Analysis" operator takes one attribute of string type. When users select an attribute with an integer type, we prompt a warning message.
 
-**![](https://lh6.googleusercontent.com/GO96SesVN8fAdWrrR59a6Dq_8ocI5ioaEOkCQ20oo-RNqHzuFUheMXf9-bMziEJ-RZ33Xaw8MUqqri0L1JfXK-hjaHOAH-AaBuRR7ArMmn4Ao3k0MT3rA6J8h_2DoNIpw1Sb4HyfN2Rb7jFJrPeJIek)**
-Fig. 4, Sentiment Analysis type validation example
+<figure align="center">
+<img src="sentiment-analysis-type-validation.png" alt="Figure 4" style="max-width:23rem">
+<figcaption><i>Figure 4: Sentiment Analysis Type Validation Example</i></figcaption>
+</figure>
 
 #### Hash Join Operator
 
 The "Hash Join" operator requires the two key attributes to have the same type.
 
-**![](https://lh4.googleusercontent.com/sDvAMcvoZlZ9IhEL4Vt3FxtqdgmszacOGzoS7HzhKGhGUS0tM_b_alb_eSJushXsqWAaazlBQ_gpvSsw1-ejhvSqFJf_-TIRNd5l6NQHpNU7MwyYdQ8FMRlHXb9zo2YpcZRohpKF3tVZ7cdScZxymA8)**
-
-Fig. 5, Hash Join type validation example
+<figure align="center">
+<img src="hash-join-type-validation.png" alt="Figure 5" style="max-width:23rem">
+<figcaption><i>Figure 5: Hash Join Type Validation Example</i></figcaption>
+</figure>
 
 #### Aggregate Opeartor
 
 The "Aggregate" operator supports multiple aggregation functions, like sum, count, concat, etc. Each aggregation function has different requirements regarding its input attribute. For example, the `sum` function must be computed on a numeric type attribute (integer, long, double, or timestamp), and the `concat` function must be computed on a string type attribute, while the `count` function has no type requirement.
 
-**![](https://lh6.googleusercontent.com/2TSCNDgPyQz-1XAQneiRzDkXg4Ig1ZGHpcukHgXqD9YRUX_HPCOi0l9chI-zM2BsM4F9zABxIUt06UO3Abgy-at6RrzPf2Z71wERAWpS-HpxefwtBMcin0Fu6afTy86GsSyE-nAEhkBJlGlim6W34qU)**
-
-Fig. 6, Aggregate type validation example
+<figure align="center">
+<img src="aggregate-type-validation.png" alt="Figure 6" style="max-width:23rem">
+<figcaption><i>Figure 6: Aggregate Type Validation Example</i></figcaption>
+</figure>
 
 ### Implementation
 
@@ -257,7 +259,7 @@ In the "Hash Join" operator, the attribute type of `buildAttributeName` (Left In
 }
 ```
 
-*Note: the  `$data`  keyword is used to implement value comparison. Currently, it is the only way to check equality between values in JSON Schema. However, the  `$data`  keyword proposal is included not in the formal JSON Schema standard. See  [json-schema-org/json-schema-spec#51](https://github.com/json-schema-org/json-schema-spec/issues/51), and  [https://ajv.js.org/guide/combining-schemas.html#data-reference](https://ajv.js.org/guide/combining-schemas.html#data-reference).*
+*Note: the  `$data`  keyword is used to implement value comparison. Currently, it is the only way to check equality between values in JSON Schema. However, the  `$data`  keyword proposal is included not in the formal JSON Schema standard. See <https://github.com/json-schema-org/json-schema-spec/issues/51>, and <https://ajv.js.org/guide/combining-schemas.html#data-reference>.*
 
 ### Attribute type dependent on other property's value
 
