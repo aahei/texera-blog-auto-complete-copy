@@ -26,7 +26,7 @@ The property values in Figure 1 indicate that the operator filters the records w
 
 ### What are operator input schemas
 
-Various formats of data can be processed by Texera, and the format of data is represented by its schema, which is a set of attributes. In order to let every operator know what attributes of the data are available, each operator deduces its output schema using its input schema and propagates it to the next operator. This mechanism is called "schema propagation." Schema propagation is an important part of the system, as it is the base of many useful features such as operator validation and attribute autocomplete.
+Various formats of data can be processed by Texera, and the format of data is represented by its schema, which is a set of attributes. In order to let every operator know what attributes of the data are available, each operator deduces its output schema using its input schema and propagates it to the next operator. The propagation is done in topological order from source operators to sink operators in the workflow, which is a directed acyclic graph (DAG) of operators. This mechanism is called "schema propagation." Schema propagation is an important part of the system, as it is the base of many useful features such as operator validation and attribute autocomplete.
 
 ### What is attribute autocomplete
 
@@ -64,7 +64,7 @@ When a user renames an attribute through an operator, the attribute name will be
 
 Figure 3 shows how the attribute selection is automatically updated in the "Filter" operator when the result attribute name is changed in its preceding "Sentiment Analysis" operator.
 
-When the user changes the name of the output attribute of the "Sentiment Analysis" operator from `"A"` to `"B"`, the `Attribute` field whose value was `"A"` in the succeeding “Filter” operator is automatically updated to `"B"`.
+When the user changes the name of the output attribute of the "Sentiment Analysis" operator from `"X"` to `"Y"`, the `Attribute` field whose value was `"X"` in the succeeding “Filter” operator is automatically updated to `"Y"`.
 
 <figure align="center">
 <img src="auto-attribute-correction-process.gif" alt="Figure 3">
